@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="256" viewBox="0 0 720 256" fill="none">
+  <!-- Summit Card wordmark. White-on-transparent so it reads on the navy chat header;
+       the site nav uses an inline navy version of the same mark on its light background. -->
+  <g transform="translate(24 40)">
+    <!-- back peak -->
+    <path d="M84 172 L8 172 L58 86 L84 130 Z" fill="#FFFFFF" opacity="0.82"/>
+    <!-- front peak -->
+    <path d="M84 172 L160 172 L104 60 L84 130 Z" fill="#FFFFFF"/>
+    <!-- snow cap accent -->
+    <path d="M104 60 L91 84 L104 103 L117 84 Z" fill="#2E7DB5"/>
+  </g>
+  <text x="204" y="120" font-family="Inter, Helvetica, Arial, sans-serif" font-size="70" font-weight="700" fill="#FFFFFF" letter-spacing="-1.5">Summit</text>
+  <text x="207" y="188" font-family="Inter, Helvetica, Arial, sans-serif" font-size="40" font-weight="500" fill="#FFFFFF" letter-spacing="10">CARD</text>
+</svg>

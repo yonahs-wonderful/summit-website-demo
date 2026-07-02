@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Summit Card — Reach higher</title>
+  <meta name="description" content="Summit Card: three cards, one standard of service. Cashback, travel rewards, and Ale, a card-servicing assistant that's here 24/7." />
+  <link rel="preconnect" href="https://demo003.app.demo.wonderful.ai" />
+  <!-- Inline mountain-mark favicon (no extra asset request) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 168 180'%3E%3Cpath d='M84 172 L8 172 L58 86 L84 130 Z' fill='%2312395C' opacity='0.55'/%3E%3Cpath d='M84 172 L160 172 L104 60 L84 130 Z' fill='%2312395C'/%3E%3Cpath d='M104 60 L91 84 L104 103 L117 84 Z' fill='%232E7DB5'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ============================== NAV ============================== -->
+  <header class="nav">
+    <div class="wrap nav__inner">
+      <a class="brand" href="#top" aria-label="Summit Card home">
+        <!-- Inline navy version of the mark (the PNG in /assets is the white version for the chat header). -->
+        <svg class="brand__mark" width="34" height="34" viewBox="0 0 168 180" fill="none" aria-hidden="true">
+          <path d="M84 172 L8 172 L58 86 L84 130 Z" fill="#12395C" opacity="0.55"/>
+          <path d="M84 172 L160 172 L104 60 L84 130 Z" fill="#12395C"/>
+          <path d="M104 60 L91 84 L104 103 L117 84 Z" fill="#2E7DB5"/>
+        </svg>
+        <span class="brand__name">Summit<span class="brand__sub">CARD</span></span>
+      </a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#products">Cards</a>
+        <a href="#security">Security</a>
+        <a href="#ale">Meet Ale</a>
+        <button class="btn btn--primary btn--sm js-open-chat" type="button">Chat with Ale</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============================== HERO ============================== -->
+    <section class="hero">
+      <div class="wrap hero__inner">
+        <div class="hero__copy">
+          <p class="eyebrow">Summit Financial</p>
+          <h1>Reach higher with Summit Card.</h1>
+          <p class="hero__sub">
+            Three cards, one standard of service. Cashback, travel rewards, and a card servicing
+            assistant that's here 24/7.
+          </p>
+          <div class="hero__cta">
+            <button class="btn btn--primary js-open-chat" type="button">Chat with Ale</button>
+            <a class="btn btn--ghost" href="#products">Explore cards</a>
+          </div>
+          <p class="hero__hint">
+            Look for the <strong>Chat with Ale</strong> launcher in the corner — ask a question anytime.
+          </p>
+        </div>
+
+        <!-- Decorative stacked "cards" (pure CSS, no images) -->
+        <div class="hero__cards" aria-hidden="true">
+          <div class="ccard ccard--reserve">
+            <span class="ccard__tier">Reserve</span>
+            <span class="ccard__chip"></span>
+            <span class="ccard__brand">Summit</span>
+          </div>
+          <div class="ccard ccard--rewards">
+            <span class="ccard__tier">Rewards</span>
+            <span class="ccard__chip"></span>
+            <span class="ccard__brand">Summit</span>
+          </div>
+          <div class="ccard ccard--everyday">
+            <span class="ccard__tier">Everyday</span>
+            <span class="ccard__chip"></span>
+            <span class="ccard__brand">Summit</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== PRODUCTS ============================== -->
+    <section id="products" class="section">
+      <div class="wrap">
+        <h2 class="section__title">Three cards. Pick your altitude.</h2>
+        <p class="section__lead">Every Summit Card includes our core protections. Each tier adds more.</p>
+
+        <div class="tiers">
+          <!-- Everyday -->
+          <article class="tier">
+            <header class="tier__head">
+              <h3 class="tier__name">Summit Everyday</h3>
+              <p class="tier__fee"><span class="tier__fee-amt">$0</span> annual fee</p>
+            </header>
+            <ul class="tier__list">
+              <li>1% cashback on every purchase, no categories to track</li>
+              <li>0% intro APR on purchases for the first 12 billing cycles, then 19.99%&ndash;28.99% variable</li>
+              <li>Free monthly FICO score, contactless &amp; mobile wallet, instant card lock</li>
+              <li>3% foreign transaction fee</li>
+            </ul>
+            <button class="btn btn--outline js-open-chat" type="button">Ask Ale about Everyday</button>
+          </article>
+
+          <!-- Rewards -->
+          <article class="tier">
+            <header class="tier__head">
+              <h3 class="tier__name">Summit Rewards</h3>
+              <p class="tier__fee"><span class="tier__fee-amt">$95</span> annual fee</p>
+            </header>
+            <ul class="tier__list">
+              <li>3x points on dining &amp; groceries, 2x on gas &amp; transit, 1x everywhere else</li>
+              <li>40,000-point welcome bonus after $3,000 in purchases in the first 90 days</li>
+              <li>Points worth 1&cent; each as cashback or statement credit</li>
+              <li>Cell-phone protection, purchase protection, extended warranty</li>
+              <li>3% foreign transaction fee</li>
+            </ul>
+            <button class="btn btn--outline js-open-chat" type="button">Ask Ale about Rewards</button>
+          </article>
+
+          <!-- Reserve (premium) -->
+          <article class="tier tier--premium">
+            <span class="tier__flag">Premium</span>
+            <header class="tier__head">
+              <h3 class="tier__name">Summit Reserve</h3>
+              <p class="tier__fee"><span class="tier__fee-amt">$550</span> annual fee</p>
+            </header>
+            <ul class="tier__list">
+              <li>5x points on travel booked through the Summit Travel portal, 3x on dining, 1x everywhere else</li>
+              <li>75,000-point welcome bonus after $5,000 in purchases in the first 90 days</li>
+              <li>Points worth 1.5&cent; each toward travel through the portal</li>
+              <li>$300 annual travel credit, Summit Lounge airport access, Global Entry/TSA PreCheck credit</li>
+              <li><strong>No foreign transaction fee</strong></li>
+            </ul>
+            <button class="btn btn--gold js-open-chat" type="button">Ask Ale about Reserve</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== SECURITY ============================== -->
+    <section id="security" class="section section--band">
+      <div class="wrap">
+        <h2 class="section__title">Every Summit Card is built to protect you.</h2>
+        <ul class="protections">
+          <li class="protection">
+            <span class="protection__icon" aria-hidden="true">&#9733;</span>
+            <div><h3>$0 fraud liability</h3><p>You're not on the hook for unauthorized charges you report promptly.</p></div>
+          </li>
+          <li class="protection">
+            <span class="protection__icon" aria-hidden="true">&#128276;</span>
+            <div><h3>24/7 fraud monitoring</h3><p>Real-time SMS alerts the moment something looks off.</p></div>
+          </li>
+          <li class="protection">
+            <span class="protection__icon" aria-hidden="true">&#128274;</span>
+            <div><h3>Instant card lock</h3><p>Lock or unlock in the app or by phone. A card blocked for a security reason is reviewed by a specialist before it's restored.</p></div>
+          </li>
+          <li class="protection">
+            <span class="protection__icon" aria-hidden="true">&#128179;</span>
+            <div><h3>EMV chip &amp; contactless</h3><p>Tap-to-pay and chip security everywhere you shop.</p></div>
+          </li>
+          <li class="protection">
+            <span class="protection__icon" aria-hidden="true">&#10052;</span>
+            <div><h3>Freeze for free</h3><p>No cost, ever, to freeze a lost or stolen card.</p></div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================== MEET ALE ============================== -->
+    <section id="ale" class="section">
+      <div class="wrap ale">
+        <div class="ale__copy">
+          <p class="eyebrow">Meet Ale</p>
+          <h2 class="section__title section__title--left">Your servicing assistant, on call 24/7.</h2>
+          <p>
+            Have a question about your account, a charge, your rewards, or a policy? <strong>Ale</strong>,
+            our servicing assistant, can help right now &mdash; securely. Just open the chat.
+          </p>
+          <p class="ale__note">
+            Ale verifies your identity before sharing any account details, so your information stays yours.
+          </p>
+          <button class="btn btn--primary js-open-chat" type="button">Chat with Ale</button>
+        </div>
+        <div class="ale__panel" aria-hidden="true">
+          <div class="ale__bubble ale__bubble--agent">Hi, you've reached Summit Card &mdash; this is Ale. How can I help today?</div>
+          <div class="ale__bubble ale__bubble--user">What are points worth on the Reserve card?</div>
+          <div class="ale__bubble ale__bubble--agent">On Summit Reserve, points are worth 1.5&cent; each toward travel booked through the Summit Travel portal. Want the rest of the benefits too?</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <p class="footer__disclaimer">
+        Summit Card is a fictional product created for a demonstration. It is not a real financial product,
+        no real accounts or credit are offered, and no information entered here is used to open any account.
+      </p>
+      <p class="footer__copy">&copy; 2026 Summit Financial (demo).</p>
+    </div>
+  </footer>
+
+  <!-- ============================== ALE CHAT EMBED (BRIEF §2) ============================== -->
+  <script>
+  (() => {
+    const s = document.createElement('script');
+    s.src = 'https://demo003.app.demo.wonderful.ai/embed/wonderful-chat.js';
+    s.onload = () => {
+      const chat = new window.WonderfulChat({
+        environment: "demo003.api.demo.wonderful.ai",
+        agentId: "c86dd6b2-5302-4f20-9906-bf118a494d93",
+
+        // Core settings
+        agentName: 'Ale',
+        buttonText: 'Chat with Ale',
+        placeholderText: 'Ask about your card, rewards, or a policy…',
+        isRTL: false,
+
+        // Main theme colors (Summit palette — see BRIEF §3)
+        primaryColor: '#12395C',
+        accentColor:  '#2E7DB5',
+        textColor:    '#1F2933',
+
+        // Chat header
+        headerBgColor:   '#12395C',
+        headerTextColor: '#FFFFFF',
+
+        // Message bubbles
+        userBubbleColor: '#2E7DB5',
+        userTextColor:   '#FFFFFF',
+        agentBubbleColor:'#FFFFFF',
+        agentTextColor:  '#1F2933',
+
+        // Backgrounds
+        windowBgColor:   '#FFFFFF',
+        messagesBgColor: '#F2F5FA',
+        inputBgColor:    '#F2F5FA',
+
+        // Status indicators
+        statusColor: '#2E9E6B',
+        errorColor:  '#D64545',
+
+        // Summit brand mark (white-on-transparent, reads on the navy header)
+        logoUrl: '/assets/summit-logo.png'
+
+        // No `metadata`: this is a public page with no known customer, and Ale runs its own
+        // identity gate in-conversation. Passing fake PII would be misleading.
+      });
+
+      // Wire the on-page "Chat with Ale" buttons to open the widget. The widget's own corner
+      // launcher (.wonderful-chat-button) works regardless; this just lets the hero/nav/tier CTAs
+      // open it too. The embed instance exposes openChat()/toggleChat() with an isOpen flag
+      // (confirmed against wonderful-chat.js); we use those and fall back to clicking the launcher.
+      window.__summitOpenChat = () => {
+        try {
+          if (chat && !chat.isOpen && typeof chat.openChat === 'function') return chat.openChat();
+          if (chat && chat.isOpen) return; // already open — leave it
+          if (chat && typeof chat.toggleChat === 'function') return chat.toggleChat();
+        } catch (e) { /* fall through to launcher click */ }
+        const launcher = document.querySelector('.wonderful-chat-button');
+        if (launcher) launcher.click();
+      };
+    };
+    document.head.appendChild(s);
+  })();
+
+  // Delegate clicks from any .js-open-chat button to the widget opener.
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.js-open-chat');
+    if (!btn) return;
+    e.preventDefault();
+    if (typeof window.__summitOpenChat === 'function') window.__summitOpenChat();
+  });
+  </script>
+</body>
+</html>
