@@ -291,3 +291,19 @@ a:hover { text-decoration: underline; }
   .hero__sub { font-size: 1.05rem; }
   .section { padding: 56px 0; }
 }
+
+/* ============================================================
+   Ways to reach Ale — call + callback CTAs (hero + Meet Ale)
+   ============================================================ */
+.hero__tel { color: inherit; text-decoration: none; }
+.hero__tel:hover strong { color: var(--summit-blue); }
+
+.ale__reach { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 0.6em; }
+.ale__reach .btn { margin-top: 0; white-space: nowrap; }
+.ale__reach-note { font-size: 0.92rem; color: var(--muted); margin-top: 0.9em; }
+.ale__reach-note strong { color: var(--summit-ink); }
+
+@media (max-width: 560px) {
+  .ale__reach { flex-direction: column; align-items: stretch; }
+  .ale__reach .btn { text-align: center; }
+}

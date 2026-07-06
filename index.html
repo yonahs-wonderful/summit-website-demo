@@ -45,10 +45,12 @@
           </p>
           <div class="hero__cta">
             <button class="btn btn--primary js-open-chat" type="button">Chat with Ale</button>
+            <a class="btn btn--ghost" href="tel:+16203039197">Call&nbsp;+1&nbsp;(620)&nbsp;303&#8209;9197</a>
             <a class="btn btn--ghost" href="#products">Explore cards</a>
           </div>
           <p class="hero__hint">
-            Look for the <strong>Chat with Ale</strong> launcher in the corner — ask a question anytime.
+            Look for the <strong>Chat with Ale</strong> launcher in the corner — or call
+            <a class="hero__tel" href="tel:+16203039197"><strong>+1 (620) 303&#8209;9197</strong></a> and Ale picks up, 24/7.
           </p>
         </div>
 
@@ -173,7 +175,15 @@
           <p class="ale__note">
             Ale verifies your identity before sharing any account details, so your information stays yours.
           </p>
-          <button class="btn btn--primary js-open-chat" type="button">Chat with Ale</button>
+          <div class="ale__reach">
+            <button class="btn btn--primary js-open-chat" type="button">Chat with Ale</button>
+            <a class="btn btn--outline" href="tel:+16203039197">Call +1 (620) 303&#8209;9197</a>
+            <button class="btn btn--outline js-request-callback" type="button">Have Ale call you</button>
+          </div>
+          <p class="ale__reach-note">
+            Prefer to talk? Call anytime — or tap <strong>Have Ale call you</strong>, share your number
+            in the chat, and your phone rings in moments.
+          </p>
         </div>
         <div class="ale__panel" aria-hidden="true">
           <div class="ale__bubble ale__bubble--agent">Hi, you've reached Summit Card &mdash; this is Ale. How can I help today?</div>
@@ -255,12 +265,42 @@
         const launcher = document.querySelector('.wonderful-chat-button');
         if (launcher) launcher.click();
       };
+
+      // "Have Ale call you": open the chat and auto-send the callback request so Ale immediately
+      // asks for the number. chat.sendMessage() sends whatever is in chat.ui.inputField and no-ops
+      // until the WebSocket is connected (confirmed against wonderful-chat.js), so we poll briefly;
+      // if the connection never comes up we leave the text prefilled for the visitor to send.
+      const CALLBACK_MSG = "Hi Ale — could you call me instead? I'd like a callback.";
+      window.__summitRequestCallback = () => {
+        window.__summitOpenChat();
+        const attempt = (left) => {
+          try {
+            const field = chat && chat.ui && chat.ui.inputField;
+            if (field && chat.wsManager && chat.wsManager.isConnected() &&
+                typeof chat.sendMessage === 'function') {
+              field.value = CALLBACK_MSG;
+              chat.sendMessage();
+              return;
+            }
+            if (field && left <= 0) { field.value = CALLBACK_MSG; return; } // prefill fallback
+          } catch (e) { /* keep retrying */ }
+          if (left > 0) setTimeout(() => attempt(left - 1), 400);
+        };
+        attempt(15); // ~6s of patience for the socket
+      };
     };
     document.head.appendChild(s);
   })();
 
-  // Delegate clicks from any .js-open-chat button to the widget opener.
+  // Delegate clicks from the CTA buttons to the widget helpers.
   document.addEventListener('click', (e) => {
+    const cb = e.target.closest('.js-request-callback');
+    if (cb) {
+      e.preventDefault();
+      if (typeof window.__summitRequestCallback === 'function') window.__summitRequestCallback();
+      else if (typeof window.__summitOpenChat === 'function') window.__summitOpenChat();
+      return;
+    }
     const btn = e.target.closest('.js-open-chat');
     if (!btn) return;
     e.preventDefault();
