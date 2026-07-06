@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Summit Card survey</title>
   <meta name="robots" content="noindex">
-  <!-- Interim redirect: csat-send's survey SMS links here (its fallback URL). Until the public
-       csat-survey-form app is properly EMBEDDED on this page (platform apps have no bare stable
-       URL), forward the token to the app's portal route. -->
-  <script>location.replace('https://demo003.app.demo.wonderful.ai/apps/csat-survey-form' + location.search);</script>
+  <!-- csat-send's survey SMS links here (its fallback URL). Forwards the token to the app's
+       ANONYMOUS share link (/s/<code>, minted 2026-07-06, 90-day expiry, revocable by disabling
+       anonymous_access_enabled on the csat-survey-form app) — customers need NO login. Re-mint via
+       POST /api/v2/apps/{id}/asset-session {"expires_in":<s>} and update the code here. -->
+  <script>location.replace('https://demo003.app.demo.wonderful.ai/s/neIGxftBxNRD' + location.search);</script>
 </head>
 <body>
   <p style="font-family: system-ui; padding: 2rem;">Opening your Summit Card survey…
     <a id="fallback" href="#">Tap here if nothing happens.</a></p>
-  <script>document.getElementById('fallback').href = 'https://demo003.app.demo.wonderful.ai/apps/csat-survey-form' + location.search;</script>
+  <script>document.getElementById('fallback').href = 'https://demo003.app.demo.wonderful.ai/s/neIGxftBxNRD' + location.search;</script>
 </body>
 </html>
