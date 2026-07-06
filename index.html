@@ -241,13 +241,14 @@
             <input id="cb-num" type="tel" inputmode="numeric" placeholder="53 394 6449" autocomplete="tel-national" />
           </label>
         </div>
-        <p class="cbmodal__hint">A leading 0 is dropped automatically. Demo note: this places a real call.</p>
+        <p class="cbmodal__hint">With or without the leading 0 — 0533946449 and 533946449 both work.
+          Demo note: this places a real call.</p>
         <p class="cbmodal__err" id="cb-err" hidden></p>
         <button class="btn btn--primary cbmodal__go" type="submit">&#128222; Call me now</button>
       </form>
       <p class="cbmodal__done" id="cb-done" hidden>
-        &#9989; <strong>Ale is dialing you now.</strong> Watch the chat window for confirmation —
-        if anything goes wrong, the details will be there.
+        &#9989; <strong>Ale is dialing you now.</strong> Your phone should ring within a few
+        moments.
       </p>
     </div>
   </div>
@@ -313,12 +314,9 @@
         if (launcher) launcher.click();
       };
 
-      // Callback form: composes ONE canonical message (number + explicit confirmation) and sends
-      // it through the chat, so Ale dials on that single turn — no conversational back-and-forth
-      // to fumble. The exact phrasing is pinned by the chat-callback-form-oneshot eval (3/3 live).
-      // chat.sendMessage() sends whatever is in chat.ui.inputField and no-ops until the WebSocket
-      // is connected, so we poll briefly; if the socket never comes up we leave the message
-      // prefilled for the visitor to send manually.
+      // Callback form fallback path: sends the canonical message through the visible chat widget.
+      // Only used if the headless socket below can't be opened — it necessarily pops the chat open,
+      // which is exactly what the primary path avoids.
       window.__summitSendCallbackMsg = (msg) => {
         window.__summitOpenChat();
         const attempt = (left) => {
@@ -348,6 +346,36 @@
   const ccSel = document.getElementById('cb-cc');
   const ccOtherWrap = document.getElementById('cb-cc-other-wrap');
 
+  // Headless callback: deliver the canonical message over a short-lived DIRECT socket to Ale (the
+  // same embedded-chat protocol the widget speaks; this page is an authorized origin on demo003),
+  // so the visible chat never opens for a phone callback. Falls back to the widget path
+  // (__summitSendCallbackMsg, which necessarily pops the chat) only if a socket can't be created.
+  const CB_WS_URL = 'wss://demo003.api.demo.wonderful.ai/embedded/agents/c86dd6b2-5302-4f20-9906-bf118a494d93/chat';
+  function cbPlaceHeadless(msg) {
+    let ws;
+    try { ws = new WebSocket(CB_WS_URL); } catch (e) { window.__summitSendCallbackMsg(msg); return; }
+    let sessionId = null, sent = false;
+    ws.onopen = () => ws.send(JSON.stringify({ id: 1, metadata: {} }));
+    ws.onmessage = (ev) => {
+      let e; try { e = JSON.parse(ev.data); } catch { return; }
+      if (e.session_id && !sessionId) sessionId = e.session_id;
+      if (!sent && sessionId) { // greeting is arriving -> session live; send our single turn
+        sent = true;
+        ws.send(JSON.stringify({
+          event_id: 'cb-' + Date.now(),
+          session_id: sessionId,
+          speaker: 'customer',
+          data: { type: 'text', text: msg },
+        }));
+      }
+    };
+    ws.onerror = () => {
+      if (!sent) { sent = true; try { ws.close(); } catch (e) {} window.__summitSendCallbackMsg(msg); }
+    };
+    // Leave the socket up long enough for Ale to run request-callback on our turn, then hang up.
+    setTimeout(() => { try { ws.close(); } catch (e) {} }, 25000);
+  }
+
   const cbOpen = () => { cbModal.hidden = false; cbErr.hidden = true; cbDone.hidden = true; cbForm.hidden = false; document.getElementById('cb-num').focus(); };
   const cbClose = () => { cbModal.hidden = true; };
   const cbFail = (m) => { cbErr.textContent = m; cbErr.hidden = false; };
@@ -368,7 +396,7 @@
     const digits = full.slice(1);
     if (digits.length < 8 || digits.length > 15) return cbFail('That number looks ' + (digits.length < 8 ? 'too short' : 'too long') + ' — please check it.');
     // Exact phrasing pinned by the chat-callback-form-oneshot eval — change both together.
-    window.__summitSendCallbackMsg('Please call me at ' + full + '. I confirm this is my correct number - go ahead and place the call now.');
+    cbPlaceHeadless('Please call me at ' + full + '. I confirm this is my correct number - go ahead and place the call now.');
     cbForm.hidden = true;
     cbDone.hidden = false;
     setTimeout(cbClose, 6000);
