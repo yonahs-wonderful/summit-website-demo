@@ -328,6 +328,9 @@ a:hover { text-decoration: underline; }
 .cbmodal__x:hover { color: var(--summit-ink); }
 .cbmodal__row { display: flex; gap: 10px; }
 .cbmodal__field { display: flex; flex-direction: column; gap: 4px; }
+/* display:flex above beats the UA's [hidden]{display:none}, which kept the "Other…" code field
+   permanently visible next to the country picker — restate hidden explicitly. */
+.cbmodal__field[hidden] { display: none; }
 .cbmodal__field span { font-size: 0.8rem; font-weight: 600; color: var(--summit-ink); }
 .cbmodal__field select, .cbmodal__field input {
   border: 1px solid var(--line); border-radius: 8px; padding: 10px 10px;

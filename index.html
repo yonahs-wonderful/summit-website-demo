@@ -27,6 +27,7 @@
         <a href="#products">Cards</a>
         <a href="#security">Security</a>
         <a href="#ale">Meet Ale</a>
+        <button class="btn btn--outline btn--sm js-request-callback" type="button">Have Ale call you</button>
         <button class="btn btn--primary btn--sm js-open-chat" type="button">Chat with Ale</button>
       </nav>
     </div>
@@ -218,8 +219,10 @@
           <label class="cbmodal__field cbmodal__field--cc">
             <span>Country</span>
             <select id="cb-cc">
+              <!-- +972 first & preselected: the demo phone is Israeli, and the number placeholder is
+                   Israeli-format — defaulting to +1 paired those misleadingly. -->
+              <option value="+972" selected>+972 (IL)</option>
               <option value="+1">+1 (US/CA)</option>
-              <option value="+972">+972 (IL)</option>
               <option value="+44">+44 (UK)</option>
               <option value="+49">+49 (DE)</option>
               <option value="+33">+33 (FR)</option>
