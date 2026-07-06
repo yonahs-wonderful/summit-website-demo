@@ -181,8 +181,8 @@
             <button class="btn btn--outline js-request-callback" type="button">Have Ale call you</button>
           </div>
           <p class="ale__reach-note">
-            Prefer to talk? Call anytime — or tap <strong>Have Ale call you</strong>, share your number
-            in the chat, and your phone rings in moments.
+            Prefer to talk? Call anytime — or tap <strong>Have Ale call you</strong>, enter your number,
+            and your phone rings in moments.
           </p>
         </div>
         <div class="ale__panel" aria-hidden="true">
@@ -204,6 +204,50 @@
       <p class="footer__copy">&copy; 2026 Summit Financial (demo).</p>
     </div>
   </footer>
+
+  <!-- ============================== CALLBACK FORM MODAL ============================== -->
+  <div class="cbmodal" id="cbmodal" hidden>
+    <div class="cbmodal__backdrop" data-cb-close></div>
+    <div class="cbmodal__card" role="dialog" aria-modal="true" aria-labelledby="cbmodal-title">
+      <button class="cbmodal__x" type="button" data-cb-close aria-label="Close">&times;</button>
+      <h3 id="cbmodal-title">Have Ale call you</h3>
+      <p class="cbmodal__sub">Enter your number and Ale calls you right away — from
+        <strong>+1&nbsp;(620)&nbsp;303&#8209;9197</strong>.</p>
+      <form id="cbform" novalidate>
+        <div class="cbmodal__row">
+          <label class="cbmodal__field cbmodal__field--cc">
+            <span>Country</span>
+            <select id="cb-cc">
+              <option value="+1">+1 (US/CA)</option>
+              <option value="+972">+972 (IL)</option>
+              <option value="+44">+44 (UK)</option>
+              <option value="+49">+49 (DE)</option>
+              <option value="+33">+33 (FR)</option>
+              <option value="+34">+34 (ES)</option>
+              <option value="+39">+39 (IT)</option>
+              <option value="+61">+61 (AU)</option>
+              <option value="other">Other…</option>
+            </select>
+          </label>
+          <label class="cbmodal__field cbmodal__field--cc-other" id="cb-cc-other-wrap" hidden>
+            <span>Code</span>
+            <input id="cb-cc-other" type="text" inputmode="numeric" placeholder="+31" maxlength="5" />
+          </label>
+          <label class="cbmodal__field cbmodal__field--num">
+            <span>Phone number</span>
+            <input id="cb-num" type="tel" inputmode="numeric" placeholder="53 394 6449" autocomplete="tel-national" />
+          </label>
+        </div>
+        <p class="cbmodal__hint">A leading 0 is dropped automatically. Demo note: this places a real call.</p>
+        <p class="cbmodal__err" id="cb-err" hidden></p>
+        <button class="btn btn--primary cbmodal__go" type="submit">&#128222; Call me now</button>
+      </form>
+      <p class="cbmodal__done" id="cb-done" hidden>
+        &#9989; <strong>Ale is dialing you now.</strong> Watch the chat window for confirmation —
+        if anything goes wrong, the details will be there.
+      </p>
+    </div>
+  </div>
 
   <!-- ============================== ALE CHAT EMBED (BRIEF §2) ============================== -->
   <script>
@@ -266,23 +310,24 @@
         if (launcher) launcher.click();
       };
 
-      // "Have Ale call you": open the chat and auto-send the callback request so Ale immediately
-      // asks for the number. chat.sendMessage() sends whatever is in chat.ui.inputField and no-ops
-      // until the WebSocket is connected (confirmed against wonderful-chat.js), so we poll briefly;
-      // if the connection never comes up we leave the text prefilled for the visitor to send.
-      const CALLBACK_MSG = "Hi Ale — could you call me instead? I'd like a callback.";
-      window.__summitRequestCallback = () => {
+      // Callback form: composes ONE canonical message (number + explicit confirmation) and sends
+      // it through the chat, so Ale dials on that single turn — no conversational back-and-forth
+      // to fumble. The exact phrasing is pinned by the chat-callback-form-oneshot eval (3/3 live).
+      // chat.sendMessage() sends whatever is in chat.ui.inputField and no-ops until the WebSocket
+      // is connected, so we poll briefly; if the socket never comes up we leave the message
+      // prefilled for the visitor to send manually.
+      window.__summitSendCallbackMsg = (msg) => {
         window.__summitOpenChat();
         const attempt = (left) => {
           try {
             const field = chat && chat.ui && chat.ui.inputField;
             if (field && chat.wsManager && chat.wsManager.isConnected() &&
                 typeof chat.sendMessage === 'function') {
-              field.value = CALLBACK_MSG;
+              field.value = msg;
               chat.sendMessage();
               return;
             }
-            if (field && left <= 0) { field.value = CALLBACK_MSG; return; } // prefill fallback
+            if (field && left <= 0) { field.value = msg; return; } // prefill fallback
           } catch (e) { /* keep retrying */ }
           if (left > 0) setTimeout(() => attempt(left - 1), 400);
         };
@@ -292,15 +337,45 @@
     document.head.appendChild(s);
   })();
 
-  // Delegate clicks from the CTA buttons to the widget helpers.
+  // ---- Callback form modal ----
+  const cbModal = document.getElementById('cbmodal');
+  const cbErr = document.getElementById('cb-err');
+  const cbDone = document.getElementById('cb-done');
+  const cbForm = document.getElementById('cbform');
+  const ccSel = document.getElementById('cb-cc');
+  const ccOtherWrap = document.getElementById('cb-cc-other-wrap');
+
+  const cbOpen = () => { cbModal.hidden = false; cbErr.hidden = true; cbDone.hidden = true; cbForm.hidden = false; document.getElementById('cb-num').focus(); };
+  const cbClose = () => { cbModal.hidden = true; };
+  const cbFail = (m) => { cbErr.textContent = m; cbErr.hidden = false; };
+
+  ccSel.addEventListener('change', () => { ccOtherWrap.hidden = ccSel.value !== 'other'; });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !cbModal.hidden) cbClose(); });
+
+  cbForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    cbErr.hidden = true;
+    let cc = ccSel.value === 'other' ? document.getElementById('cb-cc-other').value.trim() : ccSel.value;
+    cc = '+' + cc.replace(/\D/g, '');
+    if (cc.length < 2 || cc.length > 5) return cbFail('Please enter a valid country code, like +31.');
+    let num = document.getElementById('cb-num').value.replace(/\D/g, '');
+    num = num.replace(/^0+/, ''); // national prefix drops when dialing internationally
+    if (!num) return cbFail('Please enter your phone number.');
+    const full = cc + num;
+    const digits = full.slice(1);
+    if (digits.length < 8 || digits.length > 15) return cbFail('That number looks ' + (digits.length < 8 ? 'too short' : 'too long') + ' — please check it.');
+    // Exact phrasing pinned by the chat-callback-form-oneshot eval — change both together.
+    window.__summitSendCallbackMsg('Please call me at ' + full + '. I confirm this is my correct number - go ahead and place the call now.');
+    cbForm.hidden = true;
+    cbDone.hidden = false;
+    setTimeout(cbClose, 6000);
+  });
+
+  // Delegate clicks from the CTA buttons.
   document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-cb-close]')) { e.preventDefault(); cbClose(); return; }
     const cb = e.target.closest('.js-request-callback');
-    if (cb) {
-      e.preventDefault();
-      if (typeof window.__summitRequestCallback === 'function') window.__summitRequestCallback();
-      else if (typeof window.__summitOpenChat === 'function') window.__summitOpenChat();
-      return;
-    }
+    if (cb) { e.preventDefault(); cbOpen(); return; }
     const btn = e.target.closest('.js-open-chat');
     if (!btn) return;
     e.preventDefault();
